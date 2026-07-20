@@ -14,18 +14,18 @@
 <body>
     <div class="container">
         <h2>Production Dashboard Live View</h2>
-        <!-- The ID allows JavaScript to target this image element -->
-        <img id="dashboard-live-img" src="screenshot.jpg" alt="Production Status">
+        <!-- The ID lets JavaScript target the image, and ?t=timestamp tricks the cache -->
+        <img id="dashboard-img" src="screenshot.jpg?t=0" alt="Production Status">
     </div>
 
     <script>
-        // This script runs on the phone and forces the image to reload every 60 seconds
+        // Update the image source URL every 60 seconds with a unique timestamp to force a reload.
         setInterval(function() {
-            var img = document.getElementById('dashboard-live-img');
-            // Adding a dynamic timestamp (?t=...) tricks the phone into bypassing its cache memory
+            var img = document.getElementById('dashboard-img');
+            // Adding '?t=' + the current time makes the browser treat it as a new file request every time.
             img.src = 'screenshot.jpg?t=' + new Date().getTime();
-            console.log("Phone dashboard image refreshed from server.");
-        }, 60000); // 60000 milliseconds = 60 seconds
+            console.log("Dashboard view refreshed.");
+        }, 60000); // 60000 milliseconds = 60 seconds.
     </script>
 </body>
 </html>
