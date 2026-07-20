@@ -1,6 +1,4 @@
-
-
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -26,7 +24,7 @@
         const statusElement = document.getElementById('status');
 
         function fetchLiveImage() {
-            // Fetch the configuration data containing the latest single image string from GitHub
+            // Fetch the text file containing the latest screenshot
             fetch('live_config.json?t=' + new Date().getTime())
                 .then(response => response.json())
                 .then(data => {
@@ -37,14 +35,17 @@
                     }
                 })
                 .catch(err => {
-                    console.log("Sync pending deployment...");
+                    console.log("Waiting for new data update...");
                 });
         }
 
-        // Run immediately on page load
+        // Run immediately when you open the link
         fetchLiveImage();
-        // Force refresh from the cloud data channel exactly every 60 seconds
-        setInterval(fetchLiveImage, 60000);
+
+        # FORCE FULL PAGE AUTO-REFRESH EVERY 60 SECONDS
+        setTimeout(function() {
+            location.reload(true); // Forces a hard reload from the server, completely ignoring cache
+        }, 60000); // 60000 milliseconds = 1 minute
     </script>
 </body>
 </html>
