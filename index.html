@@ -7,45 +7,27 @@
     <style>
         body { margin: 0; padding: 0; background-color: #0b0f19; display: flex; justify-content: center; align-items: center; min-height: 100vh; font-family: sans-serif; }
         .container { width: 100%; max-width: 1200px; padding: 20px; text-align: center; }
-        img { width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); display: none; }
-        .loading { color: #ffffff; font-size: 18px; margin-top: 20px; }
+        img { width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
         h2 { color: #ffffff; margin-bottom: 15px; }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>Production Dashboard Live View</h2>
-        <div id="status" class="loading">Connecting to live feed...</div>
-        <img id="dashboard-img" alt="Production Status">
+        <!-- The unique timestamp tag forces a real-time server pull immediately -->
+        <img id="live-display" alt="Production Status">
     </div>
 
     <script>
-        const imageElement = document.getElementById('dashboard-img');
-        const statusElement = document.getElementById('status');
+        // Set the image source dynamically with a time code to break through all server delays
+        document.getElementById('live-display').src = 'screenshot.jpg?t=' + new Date().getTime();
 
-        function fetchLiveImage() {
-            // Fetch the text file containing the latest screenshot
-            fetch('live_config.json?t=' + new Date().getTime())
-                .then(response => response.json())
-                .then(data => {
-                    if (data && data.image_base64) {
-                        imageElement.src = data.image_base64;
-                        imageElement.style.display = 'inline-block';
-                        statusElement.style.display = 'none';
-                    }
-                })
-                .catch(err => {
-                    console.log("Waiting for new data update...");
-                });
-        }
-
-        // Run immediately when you open the link
-        fetchLiveImage();
-
-        # FORCE FULL PAGE AUTO-REFRESH EVERY 60 SECONDS
+        // Automatically reload the entire page every 60 seconds
         setTimeout(function() {
-            location.reload(true); // Forces a hard reload from the server, completely ignoring cache
-        }, 60000); // 60000 milliseconds = 1 minute
+            location.reload(true);
+        }, 60000);
     </script>
 </body>
 </html>
+    
+       
