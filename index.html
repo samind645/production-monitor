@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+
+
+    <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -7,25 +9,42 @@
     <style>
         body { margin: 0; padding: 0; background-color: #0b0f19; display: flex; justify-content: center; align-items: center; min-height: 100vh; font-family: sans-serif; }
         .container { width: 100%; max-width: 1200px; padding: 20px; text-align: center; }
-        img { width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        img { width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); display: none; }
+        .loading { color: #ffffff; font-size: 18px; margin-top: 20px; }
         h2 { color: #ffffff; margin-bottom: 15px; }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>Production Dashboard Live View</h2>
-        <!-- The ID lets JavaScript target the image, and ?t=timestamp tricks the cache -->
-        <img id="dashboard-img" src="screenshot.jpg?t=0" alt="Production Status">
+        <div id="status" class="loading">Connecting to live feed...</div>
+        <img id="dashboard-img" alt="Production Status">
     </div>
 
     <script>
-        // Update the image source URL every 60 seconds with a unique timestamp to force a reload.
-        setInterval(function() {
-            var img = document.getElementById('dashboard-img');
-            // Adding '?t=' + the current time makes the browser treat it as a new file request every time.
-            img.src = 'screenshot.jpg?t=' + new Date().getTime();
-            console.log("Dashboard view refreshed.");
-        }, 60000); // 60000 milliseconds = 60 seconds.
+        const imageElement = document.getElementById('dashboard-img');
+        const statusElement = document.getElementById('status');
+
+        function fetchLiveImage() {
+            // Fetch the configuration data containing the latest single image string from GitHub
+            fetch('live_config.json?t=' + new Date().getTime())
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.image_base64) {
+                        imageElement.src = data.image_base64;
+                        imageElement.style.display = 'inline-block';
+                        statusElement.style.display = 'none';
+                    }
+                })
+                .catch(err => {
+                    console.log("Sync pending deployment...");
+                });
+        }
+
+        // Run immediately on page load
+        fetchLiveImage();
+        // Force refresh from the cloud data channel exactly every 60 seconds
+        setInterval(fetchLiveImage, 60000);
     </script>
 </body>
 </html>
