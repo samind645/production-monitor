@@ -14,6 +14,18 @@
 <body>
     <div class="container">
         <h2>Production Dashboard Live View</h2>
-        <img src="screenshot.jpg" alt="Production Status">
+        <!-- The ID allows JavaScript to target this image element -->
+        <img id="dashboard-live-img" src="screenshot.jpg" alt="Production Status">
     </div>
+
+    <script>
+        // This script runs on the phone and forces the image to reload every 60 seconds
+        setInterval(function() {
+            var img = document.getElementById('dashboard-live-img');
+            // Adding a dynamic timestamp (?t=...) tricks the phone into bypassing its cache memory
+            img.src = 'screenshot.jpg?t=' + new Date().getTime();
+            console.log("Phone dashboard image refreshed from server.");
+        }, 60000); // 60000 milliseconds = 60 seconds
+    </script>
 </body>
+</html>
