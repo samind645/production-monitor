@@ -14,20 +14,22 @@
 <body>
     <div class="container">
         <h2>Production Dashboard Live View</h2>
-        <!-- The unique timestamp tag forces a real-time server pull immediately -->
-        <img id="live-display" alt="Production Status">
+        <!-- Loads the live image stream -->
+        <img id="live-img" src="" alt="Production Status Loading...">
     </div>
 
     <script>
-        // Set the image source dynamically with a time code to break through all server delays
-        document.getElementById('live-display').src = 'screenshot.jpg?t=' + new Date().getTime();
+        function refreshImage() {
+            // Re-fetches the live screenshot image link directly
+            var img = document.getElementById('live-img');
+            img.src = 'https://i.imgur.com/YOUR_IMAGE_ID.jpg?t=' + new Date().getTime();
+        }
 
-        // Automatically reload the entire page every 60 seconds
-        setTimeout(function() {
-            location.reload(true);
-        }, 60000);
+        // Run on load
+        refreshImage();
+
+        // Refresh image on screen automatically every 60 seconds
+        setInterval(refreshImage, 60000);
     </script>
 </body>
 </html>
-    
-       
